@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع منتجاتي ومشاريعي</title>
+    <link rel="stylesheet" href="https://kit.fontawesome.com/a076d05399.js">
+   
+            
+    <style>
+    .dil {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+      animation: slideIn 2s ease-in-out;
+    }
+
+    .dil h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 2px 2px 6px #000000;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 2px 2px 6px #000, 0 0 10px #00f, 0 0 20px #00f; }
+      to { text-shadow: 2px 2px 6px #000, 0 0 20px #0ff, 0 0 30px #0ff; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+            
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #470494;
+            color: #333;
+            text-align: center;
+            background-image: url('https://drive.google.com/file/d/1IDZkFHDN3ua8gALnx2nj_gvRxYmAkmkY/view?usp=sharing'); /* خلفية رئيسية تجريدية باهتة من اختياري */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            justify-content: center;   /* يوسّط nav أفقي */
+           align-items: center;       /* يوسّط nav عمودي */
+           background: #111;          /* خلفية للتجربة */
+        }
+
+        header {
+            background-color: #004602;
+            color: white;
+            padding: 1.5em 0;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            top: 0;
+            z-index: 1000;
+              background: linear-gradient(to bottom, #004400 80%, #000000 100%);
+
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+       nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            padding: 0;
+            justify-content: center;
+}
+
+nav ul li a {
+            display: block;
+            padding: 10px 20px;
+           border-radius: 10px;
+           font-weight: bold;
+           text-decoration: none;
+           color: white;
+           box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* ظل */
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* خلفيات مختلفة لكل كلمة */
+nav ul li:nth-child(1) a {
+  background: linear-gradient(135deg, #a2a8b3, #2a5298); /* أزرق */
+}
+
+nav ul li:nth-child(2) a {
+  background: linear-gradient(135deg, #a2a8b3, #38ef7d); /* أخضر */
+}
+
+nav ul li:nth-child(3) a {
+  background: linear-gradient(135deg, #a2a8b3, #ff4b2b); /* أحمر */
+}
+
+nav ul li:nth-child(4) a {
+  background: linear-gradient(135deg, #a2a8b3, #ffd200); /* برتقالي */
+}
+
+/* تأثير Hover */
+nav ul li a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        .profile-btn img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            min-width: 120px;
+            z-index: 1100;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .section-3d {
+            padding: 40px 20px;
+            background: linear-gradient(145deg, #E0E5EC, #ffffff);
+            margin: 20px auto;
+            width: 80%;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 20px 20px 60px #c9cccf, -20px -20px 60px #ffffff;
+
+        }
+
+        #banner {
+            padding: 30px;
+            background: linear-gradient(145deg, #005703, #005a03);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 10px 10px 20px #3a8c44, -10px -10px 20px #004103;
+        }
+
+        #product-icons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .icon {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .icon img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .icon h3 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .icon .price {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1a015e;
+            margin: 5px 0;
+        }
+
+        .icon .link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #33147b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .icon .link:hover {
+            background-color: #15155daf;
+        }
+
+        .icon:hover {
+            transform: translateY(-5px);
+        }
+
+        .banner-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .banner {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 20%;
+            min-width: 150px;
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .banner:hover {
+            transform: translateY(-5px);
+        }
+
+        .banner img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .banner p {
+            margin: 10px 0 0;
+            font-size: 16px;
+        }
+
+        .banner a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .auth, .wallet {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .wallet {
+            display: none;
+            text-align: right; /* جعل النصوص في اليمين للتوافق مع RTL */
+        }
+
+        .wallet .balance-container {
+            text-align: left; /* وضع الرصيد في اليسار */
+            background-color: rgba(76, 175, 80, 0.2); /* خلفية بلون باهت (أخضر باهت) */
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        form label {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        form input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: inset 5px 5px 10px #c9cccf, inset -5px -5px 10px #ffffff;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        #loading {
+            color: #666;
+            display: none;
+        }
+
+        footer {
+            background-color: #4C4F56;
+            color: white;
+            padding: 15px 0;
+            margin-top: 40px;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search-container input {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 2px solid #ccc;
+            outline: none;
+        }
+
+        .search-container input:focus {
+            border-color: #555;
+        }
+
+        .search-container button {
+            background-color: #555;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            margin-right: -40px;
+        }
+
+        .search-container button:hover {
+            background-color: #333;
+        }
+
+        #cart {
+            margin: 20px auto;
+            max-width: 400px;
+            text-align: right;
+        }
+
+        /* إضافة حركة للماوس: مؤشر مخصص مع تأثير انتقالي */
+        body {
+            cursor: url('https://cur.cursors-4u.net/nature/nat-3/nat258.cur'), auto; /* مؤشر ماوس مخصص (مثال: شكل ورقة) */
+        }
+
+        a, button {
+            cursor: pointer;
+            transition: cursor 0.2s ease;
+        }
+
+        a:hover, button:hover {
+            cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur116.cur'), auto; /* تغيير المؤشر عند الهوفر (مثال: يد مشيرة) */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        
+  <div class="dil">
+    <h1>Makht</h1>
+  </div>
+
+        <h1> ـــ</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">home</a></li>
+                <li><a href="#products">products</a></li>
+                <li><a href="#projects">projects</a></li>
+                <li><a href="#login">login</a></li>
+            </ul>
+        </nav>
+        <button class="profile-btn" onclick="toggleDropdown()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/user.png" alt="User Icon">
+        </button>
+        <div class="dropdown" id="dropdownMenu">
+            <a href="#" onclick="showLogin()">تسجيل الدخول</a>
+            <a href="#" onclick="showRegister()">تسجيل جديد</a>
+        </div>
+    </header>
+
+    <section id="video">
+        <!-- إضافة فيديو شراء: فيديو إعلاني عن التسوق عبر الإنترنت (من YouTube كمثال) -->
+        <video width="100%" height="auto" autoplay muted loop>
+            <source src="file:///C:/Users/HP/Downloads/%D9%81%D9%8A%D8%AF%D9%8A%D9%88%20Youtube%D8%A7%D8%AE%D8%B6%D8%B1%20%D9%88%20%D8%A7%D8%B3%D9%88%D8%AF%20%D8%A8%D8%B3%D9%8A%D8%B7%20%D9%85%D8%AA%D8%AD%D8%B1%D9%83%20%D9%85%D9%82%D8%AF%D9%85%D8%A9%20%D9%82%D9%86%D8%A7%D8%A9%20(1).mp4" type="video/mp4" type="video/mp4"> <!-- رابط فيديو عام كمثال؛ يمكن استبداله بفيديو شراء حقيقي -->
+            Your browser does not support the video tag.
+        </video>
+    </section>
+
+    <section id="home" class="section-3d">
+        <div id="banner">
+            <h2>أهلاً وسهلاً!</h2>
+            <p>اكتشف منتجاتي ومشاريعي هنا.</p>
+            <div class="search-container">
+                <input type="text" placeholder="ابحث...">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="section-3d">
+        <h2>منتجاتي</h2>
+        <div id="product-icons">
+            <div class="icon">
+                <img src="https://store-images.s-microsoft.com/image/apps.33776.9007199266244356.f3c45420-71fd-4355-9b98-549eebf9b29c.3fc6451a-bdbe-4f22-b610-1a3b4289159f?h=380" alt="منتج 1">
+                <h3>كرانشي رول</h3>
+                <p class="price">$1/50m</p>
+                <button onclick="addToCart('كرانشي رول')" class="link">إضافة إلى العربة</button>
+                <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+            </div>
+            <div class="icon">
+                <img src="https://sm.pcmag.com/t/pcmag_uk/review/s/steam/steam_nz5q.3840.jpg" alt="منتج 2">
+                <h3>ستيم</h3>
+                <p class="price">$0.1-200</p>
+                <button onclick="addToCart('ستيم')" class="link">إضافة إلى العربة</button>
+                <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                <h4>ملاحظة: يزيد السعر حسب طلبك للعبة</h4>
+            </div>
+            <div class="icon">
+                <img src="https://discord.gg/eew73deugc" alt="منتج 3">
+                <h3>تصميم بكج</h3>
+                <p class="price">$5-50</p>
+                <button onclick="addToCart('تصميم بكج')" class="link">إضافة إلى العربة</button>
+                <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                <h4>يظهر السعر حسب طلبك</h4>
+            </div>
+            <div class="icon">
+                <img src="https://sm.pcmag.com/t/pcmag_me/review/d/disney/disney_dnh9.3840.jpg" alt="منتج 4">
+                <h3>Disney+</h3>
+                <p class="price">$0.2</p>
+                <button onclick="addToCart('Disney+')" class="link">إضافة إلى العربة</button>
+                <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                <h4>ملاحظة: المنتج محدود ويتغير أسبوعيًا</h4>
+            </div>
+        </div>
+        <div id="cart">
+            <h3>عربة التسوق</h3>
+        </div>
+    </section>
+
+    
+    <section id="projects" class="section-3d">
+
+  <div class="container">
+    <a href="/minecraft" class="card">
+      <video autoplay loop muted>
+        <source src="https://i.imgur.com/GKBKwo3.mp4" type="video/mp4" />
+      </video>
+      <div class="card-title">Minecraft</div>
+    </a>
+
+    <a href="/roblox" class="card">
+      <video autoplay loop muted>
+        <source src="https://i.imgur.com/QYW2u1m.mp4" type="video/mp4" />
+      </video>
+      <div class="card-title">Roblox</div>
+    </a>
+
+    <a href="/genshin" class="card">
+      <video autoplay loop muted>
+        <source src="https://i.imgur.com/noFaCkv.mp4" type="video/mp4" />
+      </video>
+      <div class="card-title">Genshin Impact</div>
+    </a>
+
+    <a href="/rocketleague" class="card">
+      <video autoplay loop muted>
+        <source src="https://i.imgur.com/5RiPkGw.mp4" type="video/mp4" />
+      </video>
+      <div class="card-title">Rocket League</div>
+    </a>
+  </div>
+    </section>
+
+    <section id="login" class="section-3d">
+        <section id="wallet" class="wallet">
+            <h2>مرحبا, <span id="userDisplay"></span></h2>
+            <div class="balance-container">
+                <p>رصيدك: <span id="balance">0</span></p>
+            </div>
+            <div id="loading">جارٍ التحميل...</div>
+            <button onclick="logout()">تسجيل الخروج</button>
+        </section>
+        <section id="auth" class="auth">
+            <h2>تسجيل الدخول</h2>
+            <form onsubmit="event.preventDefault(); login();">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" name="password" required>
+                <div id="login-error" class="error"></div>
+                <button type="submit">دخول</button>
+            </form>
+        </section>
+        <section id="register" class="auth" style="display: none;">
+            <h2>تسجيل جديد</h2>
+            <form onsubmit="event.preventDefault(); register();">
+                <label for="reg-username">اسم المستخدم:</label>
+                <input type="text" id="reg-username" name="reg-username" required>
+                <label for="reg-password">كلمة المرور:</label>
+                <input type="password" id="reg-password" name="reg-password" required>
+                <div id="register-error" class="error"></div>
+                <button type="submit">تسجيل</button>
+            </form>
+        </section>
+    </section>
+
+    <section id="contact" class="section-3d">
+        <h3>للتواصل معي</h3>
+        <div class="banner-container">
+            <div class="banner">
+                <a href="mailto:bachirghlis@gmail.com" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.GPb0ZcxnKxbRAXHa3xNw3QHaHa?rs=1&pid=ImgDetMain" alt="Email">
+                    <p>Email: bachirghlis@gmail.com</p>
+                </a>
+            </div>
+            <div class="banner">
+                <a href="https://wa.me/+213658037881" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.uZbyFWEhjxQikFzaNKAxjwHaHa?rs=1&pid=ImgDetMain" alt="WhatsApp">
+                    <p>WhatsApp: +213658037881</p>
+                </a>
+            </div>
+            <div class="banner">
+                <a href="https://www.instagram.com/ghlis_bachir" target="_blank">
+                    <img src="https://static.wikia.nocookie.net/instaglobal/images/2/28/Instagram_logo.png/revision/latest/scale-to-width-down/1000?cb=20160521102112" alt="Instagram">
+                    <p>Instagram: ghlis_bachir</p>
+                </a>
+            </div>
+            <div class="banner">
+                <a href="https://x.com/theking11521748" target="_blank">
+                    <img src="https://th.bing.com/th/id/OIP.OiRP0Wt_nlImTXz5w45aRQHaHa?rs=1&pid=ImgDetMain" alt="Twitter">
+                    <p>Twitter: @theking11521748</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2024</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfutRBxETZ1Nc08bSv4yUXrfD-1iJG5Ck",
+            authDomain: "makht-a42f9.firebaseapp.com",
+            databaseURL: "https://makht-a42f9-default-rtdb.firebaseio.com",
+            projectId: "makht-a42f9",
+            storageBucket: "makht-a42f9.firebasestorage.app",
+            messagingSenderId: "280418327939",
+            appId: "1:280418327939:web:7a7d6cae8ece38bd4eeab6",
+            measurementId: "G-QTQ2Y5GF1C"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Cart Functionality
+        let cart = [];
+        window.addToCart = function (productName) {
+            cart.push(productName);
+            displayCart();
+        };
+
+        function displayCart() {
+            const cartDiv = document.getElementById('cart');
+            cartDiv.innerHTML = '<h3>عربة التسوق</h3>';
+            if (cart.length === 0) {
+                cartDiv.innerHTML += '<p>عربة التسوق فارغة</p>';
+            } else {
+                cart.forEach(item => {
+                    cartDiv.innerHTML += `<p>طلب: ${item}</p>`;
+                });
+            }
+        }
+
+        // Firebase Authentication
+        window.toggleDropdown = function () {
+            const dropdown = document.getElementById("dropdownMenu");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        };
+
+        window.showLogin = function () {
+            document.getElementById("auth").style.display = "block";
+            document.getElementById("register").style.display = "none";
+            document.getElementById("wallet").style.display = "none";
+            document.getElementById("dropdownMenu").style.display = "none";
+            document.getElementById("login-error").textContent = "";
+            document.getElementById("register-error").textContent = "";
+        };
+
+        window.showRegister = function () {
+            document.getElementById("auth").style.display = "none";
+            document.getElementById("register").style.display = "block";
+            document.getElementById("wallet").style.display = "none";
+            document.getElementById("dropdownMenu").style.display = "none";
+            document.getElementById("login-error").textContent = "";
+            document.getElementById("register-error").textContent = "";
+        };
+
+        window.login = async function () {
+            const user = document.getElementById("username").value.trim();
+            const pass = document.getElementById("password").value;
+            const errorDiv = document.getElementById("login-error");
+
+            if (!user || !pass) {
+                errorDiv.textContent = "الرجاء إدخال اسم المستخدم وكلمة المرور.";
+                return;
+            }
+
+            const email = `${user}@makht.com`;
+
+            try {
+                document.getElementById("loading").style.display = "block";
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const uid = userCredential.user.uid;
+                await showWallet(user, uid);
+            } catch (error) {
+                let errorMessage = "خطأ في تسجيل الدخول: ";
+                switch (error.code) {
+                    case 'auth/wrong-password':
+                        errorMessage += "كلمة المرور غير صحيحة.";
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage += "المستخدم غير موجود.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += "البريد الإلكتروني غير صالح.";
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                errorDiv.textContent = errorMessage;
+            } finally {
+                document.getElementById("loading").style.display = "none";
+            }
+        };
+
+        window.register = async function () {
+            const user = document.getElementById("reg-username").value.trim();
+            const pass = document.getElementById("reg-password").value;
+            const errorDiv = document.getElementById("register-error");
+
+            if (!user || !pass) {
+                errorDiv.textContent = "الرجاء إدخال اسم المستخدم وكلمة المرور.";
+                return;
+            }
+
+            if (pass.length < 6) {
+                errorDiv.textContent = "كلمة المرور يجب أن تكون 6 أحرف على الأقل.";
+                return;
+            }
+
+            const email = `${user}@makht.com`;
+
+            try {
+                document.getElementById("loading").style.display = "block";
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                const uid = userCredential.user.uid;
+                await setDoc(doc(db, "wallets", uid), {
+                    balance: 0
+                });
+                await showWallet(user, uid);
+            } catch (error) {
+                let errorMessage = "خطأ في التسجيل: ";
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage += "اسم المستخدم مستخدم بالفعل.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage += "البريد الإلكتروني غير صالح.";
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage += "كلمة المرور ضعيفة جدًا.";
+                        break;
+                    default:
+                        errorMessage += error.message;
+                }
+                errorDiv.textContent = errorMessage;
+            } finally {
+                document.getElementById("loading").style.display = "none";
+            }
+        };
+
+        async function showWallet(username, uid) {
+            document.getElementById("auth").style.display = "none";
+            document.getElementById("register").style.display = "none";
+            document.getElementById("wallet").style.display = "block";
+            document.getElementById("userDisplay").textContent = username;
+
+            const walletRef = doc(db, "wallets", uid);
+            const walletSnap = await getDoc(walletRef);
+            if (walletSnap.exists()) {
+                document.getElementById("balance").textContent = walletSnap.data().balance;
+            } else {
+                document.getElementById("balance").textContent = "0";
+            }
+        }
+
+        window.logout = async function () {
+            try {
+                await signOut(auth);
+                document.getElementById("auth").style.display = "block";
+                document.getElementById("register").style.display = "none";
+                document.getElementById("wallet").style.display = "none";
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+                document.getElementById("reg-username").value = "";
+                document.getElementById("reg-password").value = "";
+                document.getElementById("login-error").textContent = "";
+                document.getElementById("register-error").textContent = "";
+            } catch (error) {
+                alert("خطأ في تسجيل الخروج: " + error.message);
+            }
+        };
+    </script>
+</body>
+</html>
+    <style>
+.container {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 100px 40px 40px;
+      height: 100vh;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .card {
+      position: relative;
+      width: 250px;
+      height: 150px;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.4s ease;
+      z-index: 0;
+    }
+
+    .card:hover {
+      transform: scale(1.6);
+      z-index: 10;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+
+    .card video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .card-title {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      font-size: 1.2rem;
+      color: white;
+      text-shadow: 1px 1px 4px black;
+    }
+    .video {
+          background: linear-gradient(to top, #004400 90%, #000000 100%);
+
+    }
+    <style>
