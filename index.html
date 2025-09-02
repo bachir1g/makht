@@ -178,7 +178,7 @@
             color: #1a015e;
             margin: 5px 0;
         }
-        .icon .link {
+        .icon .link, .icon .buy-btn {
             display: inline-block;
             margin-top: 10px;
             padding: 8px 16px;
@@ -188,7 +188,10 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
-        .icon .link:hover {
+        .icon .buy-btn {
+            background-color: #4CAF50;
+        }
+        .icon .link:hover, .icon .buy-btn:hover {
             background-color: #15155daf;
         }
         .icon:hover {
@@ -301,10 +304,20 @@
         form button:hover {
             background-color: #45a049;
         }
-        .error {
-            color: red;
+        .error, .success {
             font-size: 14px;
             text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            background-color: #ffe6e6;
+        }
+        .success {
+            color: green;
+            background-color: #e6ffe6;
         }
         #loading {
             color: #666;
@@ -350,6 +363,53 @@
             margin: 20px auto;
             max-width: 400px;
             text-align: right;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        #cart ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #cart ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        #cart ul li:last-child {
+            border-bottom: none;
+        }
+        #cart .remove-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #cart .remove-btn:hover {
+            background-color: #cc0000;
+        }
+        #cart-total {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #buy-all-btn {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+        #buy-all-btn:hover {
+            background-color: #45a049;
         }
         a, button {
             cursor: pointer;
@@ -553,41 +613,78 @@
 
         <section id="products" class="section-3d">
             <h2>منتجاتي</h2>
+            <p id="purchase-message" class="success"></p>
             <div id="product-icons">
-                <div class="icon">
-                    <img src="https://store-images.s-microsoft.com/image/apps.33776.9007199266244356.f3c45420-71fd-4355-9b98-549eebf9b29c.3fc6451a-bdbe-4f22-b610-1a3b4289159f?h=380" alt="منتج 1">
+                <div class="icon" data-price="5" data-account="crunchyroll_account@example.com">
+                    <img src="https://store-images.s-microsoft.com/image/apps.33776.9007199266244356.f3c45420-71fd-4355-9b98-549eebf9b29c.3fc6451a-bdbe-4f22-b610-1a3b4289159f?h=380" alt="كرانشي رول">
                     <h3>كرانشي رول</h3>
-                    <p class="price">$1/50m</p>
-                    <button onclick="addToCart('كرانشي رول')" class="link">إضافة إلى العربة</button>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('كرانشي رول', 5, 'crunchyroll_account@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('كرانشي رول', 5, 'crunchyroll_account@example.com')" class="buy-btn">شراء الآن</button>
                     <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
                 </div>
-                <div class="icon">
-                    <img src="https://sm.pcmag.com/t/pcmag_uk/review/s/steam/steam_nz5q.3840.jpg" alt="منتج 2">
+                <div class="icon" data-price="5" data-account="steam_account@example.com">
+                    <img src="https://sm.pcmag.com/t/pcmag_uk/review/s/steam/steam_nz5q.3840.jpg" alt="ستيم">
                     <h3>ستيم</h3>
-                    <p class="price">$0.1-200</p>
-                    <button onclick="addToCart('ستيم')" class="link">إضافة إلى العربة</button>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('ستيم', 5, 'steam_account@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('ستيم', 5, 'steam_account@example.com')" class="buy-btn">شراء الآن</button>
                     <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
-                    <h4>ملاحظة: يزيد السعر حسب طلبك للعبة</h4>
                 </div>
-                <div class="icon">
-                    <img src="https://via.placeholder.com/150" alt="منتج 3">
+                <div class="icon" data-price="5" data-account="package_design@example.com">
+                    <img src="https://via.placeholder.com/150" alt="تصميم بكج">
                     <h3>تصميم بكج</h3>
-                    <p class="price">$5-50</p>
-                    <button onclick="addToCart('تصميم بكج')" class="link">إضافة إلى العربة</button>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('تصميم بكج', 5, 'package_design@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('تصميم بكج', 5, 'package_design@example.com')" class="buy-btn">شراء الآن</button>
                     <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
-                    <h4>يظهر السعر حسب طلبك</h4>
                 </div>
-                <div class="icon">
-                    <img src="https://sm.pcmag.com/t/pcmag_me/review/d/disney/disney_dnh9.3840.jpg" alt="منتج 4">
+                <div class="icon" data-price="5" data-account="disneyplus_account@example.com">
+                    <img src="https://sm.pcmag.com/t/pcmag_me/review/d/disney/disney_dnh9.3840.jpg" alt="Disney+">
                     <h3>Disney+</h3>
-                    <p class="price">$0.2</p>
-                    <button onclick="addToCart('Disney+')" class="link">إضافة إلى العربة</button>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('Disney+', 5, 'disneyplus_account@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('Disney+', 5, 'disneyplus_account@example.com')" class="buy-btn">شراء الآن</button>
                     <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
-                    <h4>ملاحظة: المنتج محدود ويتغير أسبوعيًا</h4>
+                </div>
+                <div class="icon" data-price="5" data-account="discord_account@example.com">
+                    <img src="https://pics.craiyon.com/2023-06-06/ede74f815d6849edb266b8f208f8a71d.webp" alt="حساب Discord">
+                    <h3>حساب Discord</h3>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('حساب Discord', 5, 'discord_account@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('حساب Discord', 5, 'discord_account@example.com')" class="buy-btn">شراء الآن</button>
+                    <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                </div>
+                <div class="icon" data-price="5" data-account="discord_credit@example.com">
+                    <img src="https://www.logo.wine/a/logo/Discord/Discord-Nitro-Logo-Color.png" alt="كريدت Discord">
+                    <h3>كريدت Discord</h3>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('كريدت Discord', 5, 'discord_credit@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('كريدت Discord', 5, 'discord_credit@example.com')" class="buy-btn">شراء الآن</button>
+                    <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                </div>
+                <div class="icon" data-price="5" data-account="epic_account@example.com">
+                    <img src="https://images.alphacoders.com/114/1148319.jpg" alt="حساب Epic">
+                    <h3>حساب Epic</h3>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('حساب Epic', 5, 'epic_account@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('حساب Epic', 5, 'epic_account@example.com')" class="buy-btn">شراء الآن</button>
+                    <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
+                </div>
+                <div class="icon" data-price="5" data-account="steam_account_2@example.com">
+                    <img src="https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/01/gta-5.jpg" alt="حساب Steam إضافي">
+                    <h3>حساب Steam إضافي</h3>
+                    <p class="price">$5</p>
+                    <button onclick="addToCart('حساب Steam إضافي', 5, 'steam_account_2@example.com')" class="link">إضافة إلى العربة</button>
+                    <button onclick="buyProduct('حساب Steam إضافي', 5, 'steam_account_2@example.com')" class="buy-btn">شراء الآن</button>
+                    <a href="https://discord.gg/eew73deugc" class="link">طلب</a>
                 </div>
             </div>
             <div id="cart">
                 <h3>عربة التسوق</h3>
+                <ul id="cart-items"></ul>
+                <p id="cart-total"></p>
+                <button id="buy-all-btn" onclick="buyAllCart()">شراء الكل</button>
             </div>
         </section>
 
@@ -651,7 +748,7 @@
         </section>
 
         <footer>
-            <p>جميع الحقوق محفوظة &copy; 2024</p>
+            <p>جميع الحقوق محفوظة &copy; 2025</p>
         </footer>
     </div>
 
@@ -670,7 +767,10 @@
             getFirestore,
             doc,
             getDoc,
-            setDoc
+            setDoc,
+            updateDoc,
+            collection,
+            addDoc
         } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -700,10 +800,10 @@
                 const walletRef = doc(db, "wallets", user.uid);
                 const walletSnap = await getDoc(walletRef);
                 if (walletSnap.exists()) {
-                    document.getElementById("balance").textContent = walletSnap.data().balance;
+                    document.getElementById("balance").textContent = walletSnap.data().balance.toFixed(2);
                 } else {
                     await setDoc(walletRef, { balance: 0 });
-                    document.getElementById("balance").textContent = "0";
+                    document.getElementById("balance").textContent = "0.00";
                 }
             } else {
                 loginSection.style.display = 'block';
@@ -778,20 +878,197 @@
 
         // Cart Functionality
         let cart = [];
-        window.addToCart = function (productName) {
-            cart.push(productName);
+        window.addToCart = function (productName, price, account) {
+            cart.push({ name: productName, price: price, account: account });
+            const purchaseMessage = document.getElementById('purchase-message');
+            purchaseMessage.className = 'success';
+            purchaseMessage.textContent = `تم إضافة ${productName} إلى العربة بنجاح!`;
+            setTimeout(() => {
+                purchaseMessage.textContent = '';
+            }, 3000);
+            displayCart();
+        };
+
+        window.removeFromCart = function (index) {
+            const purchaseMessage = document.getElementById('purchase-message');
+            const removedItem = cart.splice(index, 1)[0];
+            purchaseMessage.className = 'success';
+            purchaseMessage.textContent = `تم إزالة ${removedItem.name} من العربة.`;
+            setTimeout(() => {
+                purchaseMessage.textContent = '';
+            }, 3000);
             displayCart();
         };
 
         window.displayCart = function () {
             const cartDiv = document.getElementById('cart');
-            cartDiv.innerHTML = '<h3>عربة التسوق</h3>';
+            const cartItems = document.getElementById('cart-items');
+            const cartTotalDiv = document.getElementById('cart-total');
+            const buyAllBtn = document.getElementById('buy-all-btn');
+            cartItems.innerHTML = '';
             if (cart.length === 0) {
-                cartDiv.innerHTML += '<p>عربة التسوق فارغة</p>';
+                cartItems.innerHTML = '<li>عربة التسوق فارغة</li>';
+                cartTotalDiv.innerHTML = '';
+                buyAllBtn.style.display = 'none';
             } else {
-                cart.forEach(item => {
-                    cartDiv.innerHTML += `<p>طلب: ${item}</p>`;
+                let total = 0;
+                cart.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        ${item.name} - $${item.price.toFixed(2)}
+                        <button class="remove-btn" onclick="removeFromCart(${index})">إزالة</button>
+                    `;
+                    cartItems.appendChild(li);
+                    total += item.price;
                 });
+                cartTotalDiv.innerHTML = `الإجمالي: $${total.toFixed(2)}`;
+                buyAllBtn.style.display = 'block';
+            }
+        };
+
+        // Buy Single Product
+        window.buyProduct = async function (productName, price, account) {
+            const user = auth.currentUser;
+            const purchaseMessage = document.getElementById('purchase-message');
+            if (!user) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'يرجى تسجيل الدخول لإتمام الشراء.';
+                return;
+            }
+
+            const walletRef = doc(db, "wallets", user.uid);
+            const walletSnap = await getDoc(walletRef);
+            if (!walletSnap.exists()) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'لا يوجد رصيد متاح. يرجى إضافة رصيد.';
+                return;
+            }
+
+            const currentBalance = walletSnap.data().balance;
+            if (currentBalance < price) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'رصيدك غير كافٍ لإتمام الشراء.';
+                return;
+            }
+
+            try {
+                // Deduct balance
+                await updateDoc(walletRef, {
+                    balance: currentBalance - price
+                });
+
+                // Record purchase
+                await addDoc(collection(db, "purchases"), {
+                    userId: user.uid,
+                    productName: productName,
+                    price: price,
+                    account: account,
+                    timestamp: new Date()
+                });
+
+                // Update balance display
+                document.getElementById("balance").textContent = (currentBalance - price).toFixed(2);
+
+                // Send email
+                await fetch('https://us-central1-makht-a42f9.cloudfunctions.net/sendPurchaseEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        productName: productName,
+                        account: account,
+                        price: price
+                    })
+                });
+
+                purchaseMessage.className = 'success';
+                purchaseMessage.textContent = `تم شراء ${productName} بنجاح! تم إرسال تفاصيل الحساب إلى بريدك الإلكتروني.`;
+            } catch (error) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'حدث خطأ أثناء الشراء: ' + error.message;
+            }
+        };
+
+        // Buy All Cart Items
+        window.buyAllCart = async function () {
+            const user = auth.currentUser;
+            const purchaseMessage = document.getElementById('purchase-message');
+            if (!user) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'يرجى تسجيل الدخول لإتمام الشراء.';
+                return;
+            }
+
+            if (cart.length === 0) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'عربة التسوق فارغة.';
+                return;
+            }
+
+            const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+            const walletRef = doc(db, "wallets", user.uid);
+            const walletSnap = await getDoc(walletRef);
+            if (!walletSnap.exists()) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'لا يوجد رصيد متاح. يرجى إضافة رصيد.';
+                return;
+            }
+
+            const currentBalance = walletSnap.data().balance;
+            if (currentBalance < totalPrice) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'رصيدك غير كافٍ لإتمام الشراء.';
+                return;
+            }
+
+            try {
+                // Deduct balance
+                await updateDoc(walletRef, {
+                    balance: currentBalance - totalPrice
+                });
+
+                // Record purchases
+                for (const item of cart) {
+                    await addDoc(collection(db, "purchases"), {
+                        userId: user.uid,
+                        productName: item.name,
+                        price: item.price,
+                        account: item.account,
+                        timestamp: new Date()
+                    });
+                }
+
+                // Update balance display
+                document.getElementById("balance").textContent = (currentBalance - totalPrice).toFixed(2);
+
+                // Send email with all purchased items
+                await fetch('https://us-central1-makht-a42f9.cloudfunctions.net/sendPurchaseEmail', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        items: cart.map(item => ({
+                            productName: item.name,
+                            account: item.account,
+                            price: item.price
+                        })),
+                        totalPrice: totalPrice
+                    })
+                });
+
+                // Clear cart
+                cart = [];
+                displayCart();
+
+                purchaseMessage.className = 'success';
+                purchaseMessage.textContent = 'تم شراء جميع المنتجات بنجاح! تم إرسال تفاصيل الحسابات إلى بريدك الإلكتروني.';
+            } catch (error) {
+                purchaseMessage.className = 'error';
+                purchaseMessage.textContent = 'حدث خطأ أثناء الشراء: ' + error.message;
             }
         };
 
