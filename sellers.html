@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قسم البائعين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Space Mono', monospace;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto; /* السماح بالتمرير العمودي */
+        }
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* وضع الـ canvas في الخلفية */
+        }
+        .sellers-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .card-container {
+            width: 320px;
+            background: #333;
+            border: 4px solid;
+            box-shadow: 8px 8px 0 #000;
+            border-radius: 5px;
+            overflow: hidden;
+            animation: rgbBorder 3s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes rgbBorder {
+            0% { border-color: #ff0000; }
+            33% { border-color: #00ff00; }
+            66% { border-color: #0000ff; }
+            100% { border-color: #ff0000; }
+        }
+        .upper-container {
+            height: 140px;
+            position: relative;
+            border-bottom: 4px solid #000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            overflow: hidden;
+            background: #444;
+        }
+        .upper-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.6;
+            loading: lazy;
+        }
+        .image-container {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border: 4px solid #000;
+            transform: translateY(50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .image-container:hover {
+            transform: translateY(50%) scale(1.1);
+        }
+        .image-container img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border: 2px solid #000;
+            border-radius: 50%;
+        }
+        .lower-container {
+            padding: 60px 20px 30px;
+            text-align: center;
+        }
+        .lower-container h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .lower-container h4 {
+            margin: 5px 0 10px;
+            font-size: 14px;
+            color: #ccc;
+            font-weight: normal;
+        }
+        .lower-container .rating {
+            font-size: 14px;
+            color: #ff006e;
+            margin-bottom: 15px;
+        }
+        .lower-container p {
+            font-size: 14px;
+            color: #fff;
+            border: 2px dashed #fff;
+            padding: 10px;
+            background: #444;
+            margin-bottom: 20px;
+        }
+        .sold-items {
+            margin-top: 20px;
+        }
+        .sold-items ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sold-items li {
+            background: #555;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #fff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ff006e;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+            transition: all 0.2s ease;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #fff;
+            color: #ff006e;
+            border: 3px solid #ff006e;
+            box-shadow: none;
+        }
+        .form-container {
+            background: #333;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            border: 4px solid #000;
+            border-radius: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            background: #444;
+            color: #fff;
+        }
+        .form-container button {
+            background: #ff006e;
+            color: #fff;
+            border: 3px solid #000;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .form-container button:hover {
+            background: #fff;
+            color: #ff006e;
+            border: 3px solid #ff006e;
+        }
+        .error-message {
+            color: #ff0000;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            padding-top: 60px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-content {
+            background-color: #333;
+            margin: 5% auto;
+            padding: 20px;
+            border: 4px solid;
+            animation: rgbBorder 3s infinite;
+            box-shadow: 8px 8px 0 #000;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            color: #fff;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            transform: scale(0.7);
+            animation: popIn 0.4s ease-out forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-content video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.5;
+            loading: lazy;
+        }
+        .profile-container {
+            position: relative;
+            z-index: 1;
+        }
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid;
+            animation: rgbBorder 3s infinite;
+            margin: 20px auto;
+            transition: transform 0.3s ease;
+        }
+        .profile-image:hover {
+            transform: scale(1.1);
+        }
+        .close {
+            color: #fff;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        .close:hover,
+        .close:focus {
+            color: #ff006e;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .sales-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .circle-stat {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ff006e;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            border: 3px solid #000;
+        }
+        .rating-stars {
+            margin: 10px 0;
+        }
+        .rating-stars span {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .rating-stars .filled {
+            color: #ff006e;
+        }
+        .rating-message {
+            font-size: 14px;
+            color: #ff0000;
+            margin-top: 10px;
+        }
+        .nav-link {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff4b8b, #8a4bff);
+            color: #15105b;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border: 3px solid #000;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .back-btn:hover {
+            background: linear-gradient(135deg, #fff, #e0c3fc);
+            color: #ff4b8b;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        }
+        .back-btn i {
+            font-size: 22px;
+            transition: transform 0.3s ease;
+        }
+        .back-btn:hover i {
+            transform: translateX(5px);
+        }
+        .nav-link a:hover {
+            text-decoration: none;
+        }
+        @media only screen and (max-width: 600px) {
+            .sellers-section {
+                grid-template-columns: 1fr;
+            }
+            .card-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="nav-link">
+        <a href="makht.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i> العودة إلى الصفحة الرئيسية
+        </a>
+        <a href="leaderboard.html" class="back-btn">
+            <i class="fas fa-trophy"></i> المتصدرين
+        </a>
+    </div>
+    <h1>قسم البائعين</h1>
+    <div class="nav-link">
+        <a href="sales_stats.html" class="back-btn">
+            <i class="fas fa-chart-bar"></i> عرض إحصائيات المبيعات
+        </a>
+    </div>
+    <div class="form-container">
+        <h2>إضافة أو تعديل ملف البائع</h2>
+        <input type="hidden" id="editId" value="">
+        <input type="text" id="sellerName" placeholder="اسم البائع" required>
+        <input type="text" id="sellerTitle" placeholder="الوظيفة (مثال: بائع أشياء رقمية)" required>
+        <input type="text" id="sellerImage" placeholder="رابط الصورة (اللوغو)" value="https://m.media-amazon.com/images/I/813hIf-biqL.png">
+        <input type="text" id="sellerVideo" placeholder="رابط الفيديو" value="https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-in-a-suit-with-glitches-36056-large.mp4">
+        <textarea id="sellerDescription" placeholder="وصف البائع" required>بائع متخصص في الأشياء الرقمية مع خبرة 5 سنوات.</textarea>
+        <textarea id="sellerItems" placeholder="الأشياء المباعة (مثال: حسابات ألعاب - 20 مبيعة\nخدمات تصميم - 15 مبيعة)" rows="4"></textarea>
+        <button onclick="addOrUpdateSeller()">إضافة أو تعديل البائع</button>
+        <div id="errorMessage" class="error-message"></div>
+    </div>
+    <div class="sellers-section" id="sellersSection">
+        <!-- الكروت ستُولد هنا ديناميكيًا -->
+    </div>
+
+    <script>
+        // إنشاء معرف زائر فريد إذا لم يكن موجودًا
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = 'visitor_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('visitorId', visitorId);
+        }
+
+        let sellers = JSON.parse(localStorage.getItem('sellers')) || [];
+        let currentModalId = sellers.length > 0 ? Math.max(...sellers.map(s => parseInt(s.id.replace('seller', '')))) + 1 : 1;
+
+        function addOrUpdateSeller() {
+            const errorMessage = document.getElementById('errorMessage');
+            const sellerName = document.getElementById('sellerName').value.trim();
+
+            if (!sellerName) {
+                errorMessage.textContent = 'يرجى إدخال اسم البائع';
+                return;
+            }
+
+            const editId = document.getElementById('editId').value;
+            const sellerCount = sellers.filter(s => s.name === sellerName).length;
+            const isEditing = editId && sellers.find(s => s.id === editId);
+
+            if (!isEditing && sellerCount >= 2) {
+                errorMessage.textContent = 'لقد وصلت إلى الحد الأقصى (2 بروفايل) لهذا البائع!';
+                return;
+            }
+
+            const seller = {
+                id: editId || `seller${currentModalId++}`,
+                name: document.getElementById('sellerName').value,
+                title: document.getElementById('sellerTitle').value,
+                image: document.getElementById('sellerImage').value,
+                video: document.getElementById('sellerVideo').value,
+                description: document.getElementById('sellerDescription').value,
+                items: document.getElementById('sellerItems').value.split('\n').filter(item => item.trim() !== ''),
+                ratings: isEditing ? sellers.find(s => s.id === editId).ratings || [] : []
+            };
+
+            if (editId) {
+                const index = sellers.findIndex(s => s.id === editId);
+                sellers[index] = seller;
+            } else {
+                sellers.push(seller);
+            }
+
+            localStorage.setItem('sellers', JSON.stringify(sellers));
+            errorMessage.textContent = '';
+            renderSellers();
+            clearForm();
+        }
+
+        function editSeller(id) {
+            const seller = sellers.find(s => s.id === id);
+            document.getElementById('editId').value = seller.id;
+            document.getElementById('sellerName').value = seller.name;
+            document.getElementById('sellerTitle').value = seller.title;
+            document.getElementById('sellerImage').value = seller.image;
+            document.getElementById('sellerVideo').value = seller.video;
+            document.getElementById('sellerDescription').value = seller.description;
+            document.getElementById('sellerItems').value = seller.items.join('\n');
+        }
+
+        function clearForm() {
+            document.getElementById('editId').value = '';
+            document.getElementById('sellerName').value = '';
+            document.getElementById('sellerTitle').value = '';
+            document.getElementById('sellerImage').value = '';
+            document.getElementById('sellerVideo').value = '';
+            document.getElementById('sellerDescription').value = '';
+            document.getElementById('sellerItems').value = '';
+        }
+
+        function calculateAverageRating(ratings) {
+            if (!ratings || ratings.length === 0) return 'غير مقيّم';
+            const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+            return avg.toFixed(1);
+        }
+
+        function hasVisitorRated(sellerId) {
+            const seller = sellers.find(s => s.id === sellerId);
+            return seller.ratings && seller.ratings.some(r => r.visitorId === visitorId);
+        }
+
+        function rateSeller(sellerId, rating) {
+            const seller = sellers.find(s => s.id === sellerId);
+            if (!seller.ratings) seller.ratings = [];
+
+            if (hasVisitorRated(sellerId)) {
+                const modal = document.getElementById(sellerId);
+                const message = modal.querySelector('.rating-message') || document.createElement('div');
+                message.className = 'rating-message';
+                message.textContent = 'لقد قيّمت هذا البائع بالفعل!';
+                modal.querySelector('.modal-content').appendChild(message);
+                return;
+            }
+
+            seller.ratings.push({ visitorId, rating });
+            localStorage.setItem('sellers', JSON.stringify(sellers));
+            renderSellers();
+        }
+
+        function renderSellers() {
+            const section = document.getElementById('sellersSection');
+            section.innerHTML = '';
+            sellers.forEach(seller => {
+                const avgRating = calculateAverageRating(seller.ratings);
+                const hasRated = hasVisitorRated(seller.id);
+                const card = `
+                    <div class="card-container">
+                        <div class="upper-container">
+                            <video autoplay muted loop playsinline>
+                                <source src="${seller.video}" type="video/mp4">
+                                يرجى تحديث المتصفح أو اختيار فيديو آخر.
+                            </video>
+                            <div class="image-container">
+                                <img src="${seller.image}" alt="profile image" onerror="this.src='https://via.placeholder.com/90';">
+                            </div>
+                        </div>
+                        <div class="lower-container">
+                            <div>
+                                <h3>${seller.name}</h3>
+                                <h4>${seller.title}</h4>
+                                <div class="rating">التقييم: ${avgRating}/5</div>
+                            </div>
+                            <div>
+                                <p>${seller.description}</p>
+                            </div>
+                            <div class="sold-items">
+                                <h4>الأشياء المباعة:</h4>
+                                <ul>
+                                    ${seller.items.map(item => `<li>${item}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <a href="#" class="btn" onclick="openModal('${seller.id}')">عرض الملف الشخصي</a>
+                                <a href="#" class="btn" onclick="editSeller('${seller.id}')">تعديل</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="${seller.id}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('${seller.id}')">&times;</span>
+                            <video autoplay muted loop playsinline>
+                                <source src="${seller.video}" type="video/mp4">
+                                يرجى تحديث المتصفح أو اختيار فيديو آخر.
+                            </video>
+                            <div class="profile-container">
+                                <img src="${seller.image}" alt="صورة الملف الشخصي" class="profile-image" onerror="this.src='https://via.placeholder.com/100';">
+                                <h2>ملف البائع: ${seller.name}</h2>
+                                <h4>${seller.title}</h4>
+                                <p>${seller.description}</p>
+                                <div class="rating-stars">
+                                    ${[1, 2, 3, 4, 5].map(i => `
+                                        <span class="${hasRated ? '' : 'clickable'} ${i <= avgRating ? 'filled' : ''}" 
+                                              style="cursor: ${hasRated ? 'not-allowed' : 'pointer'};" 
+                                              ${hasRated ? '' : `onclick="rateSeller('${seller.id}', ${i})"`}>★</span>
+                                    `).join('')}
+                                </div>
+                                <div class="rating">التقييم الحالي: ${avgRating}/5</div>
+                                <div class="sales-stats">
+                                    <div class="circle-stat">مبيعات: ${seller.items.length > 0 ? Math.floor(Math.random() * 200 + 50) : 0}</div>
+                                    <div class="circle-stat">التقييم: ${avgRating}/5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                section.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.style.display = 'block';
+            const stars = modal.querySelectorAll('.rating-stars span');
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseover', () => {
+                    if (!hasVisitorRated(id)) {
+                        for (let i = 0; i <= index; i++) {
+                            stars[i].classList.add('filled');
+                        }
+                    }
+                });
+                star.addEventListener('mouseout', () => {
+                    if (!hasVisitorRated(id)) {
+                        stars.forEach(s => s.classList.remove('filled'));
+                        const avgRating = calculateAverageRating(sellers.find(s => s.id === id).ratings);
+                        for (let i = 0; i < avgRating; i++) {
+                            stars[i].classList.add('filled');
+                        }
+                    }
+                });
+            });
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.style.animation = 'fadeOut 0.3s ease-in-out';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.style.animation = 'fadeIn 0.5s ease-in-out';
+            }, 300);
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target.id);
+            }
+        };
+
+        // إضافة بائع افتراضي كمثال
+        if (sellers.length === 0) {
+            sellers.push({
+                id: `seller${currentModalId++}`,
+                name: 'محمد عبدالله',
+                title: 'بائع أشياء رقمية',
+                image: 'https://m.media-amazon.com/images/I/813hIf-biqL.png',
+                video: 'https://assets.mixkit.co/videos/preview/mixkit-abstract-video-of-a-man-in-a-suit-with-glitches-36056-large.mp4',
+                description: 'بائع متخصص في الأشياء الرقمية مع خبرة 5 سنوات.',
+                items: ['حسابات ألعاب - 20 مبيعة', 'خدمات تصميم - 15 مبيعة', 'عملات رقمية - 10 مبيعات'],
+                ratings: [{ visitorId: 'visitor_example1', rating: 4 }, { visitorId: 'visitor_example2', rating: 5 }]
+            });
+            localStorage.setItem('sellers', JSON.stringify(sellers));
+        }
+        renderSellers();
+
+        // كود تأثير المطر
+        requestAnimFrame = (function() {
+            return window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.oRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function(callback) {
+                    window.setTimeout(callback, 1000/60);
+                };
+        })();
+
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var width = 0;
+        var height = 0;
+
+        window.onresize = function onresize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.onresize();
+
+        var particules = [];
+        var gouttes = [];
+        var nombrebase = 3; // تقليل عدد القطرات المنفجرة
+        var nombreb = 1; // تقليل عدد القطرات الأولية
+
+        var controls = {
+            rain: 2, // شدة المطر
+            Object: "Nothing", // بدون كائن تفاعلي
+            alpha: 1, // شفافية الخلفية
+            color: 200, // لون المطر (أزرق فاتح)
+            auto: false, // إيقاف تغيير اللون التلقائي
+            opacity: 1, // شفافية القطرات
+            saturation: 100, // تشبع اللون
+            lightness: 50, // إضاءة اللون
+            red: 0, // لون الخلفية (داكن)
+            green: 0,
+            blue: 48,
+            multi: false, // إيقاف الألوان المتعددة
+            speed: 2 // سرعة تغيير اللون (غير مستخدم)
+        };
+
+        function Rain(X, Y, nombre) {
+            if (!nombre) {
+                nombre = nombreb;
+            }
+            while (nombre--) {
+                particules.push({
+                    vitesseX: (Math.random() * 0.25), // حركة أفقية طفيفة
+                    vitesseY: (Math.random() * 9) + 2, // زيادة الحد الأدنى للسرعة العمودية
+                    X: X,
+                    Y: Y,
+                    alpha: 1,
+                    couleur: "hsla(" + controls.color + "," + controls.saturation + "%," + controls.lightness + "%," + controls.opacity + ")",
+                })
+            }
+        }
+
+        function explosion(X, Y, couleur, nombre) {
+            if (!nombre) {
+                nombre = nombrebase;
+            }
+            while (nombre--) {
+                gouttes.push({
+                    vitesseX: (Math.random() * 4 - 2),
+                    vitesseY: (Math.random() * -4),
+                    X: X,
+                    Y: Y,
+                    radius: 0.65 + Math.floor(Math.random() * 1.6),
+                    alpha: 1,
+                    couleur: couleur
+                })
+            }
+        }
+
+        function rendu(ctx) {
+            ctx.save();
+            ctx.fillStyle = 'rgba(' + controls.red + ',' + controls.green + ',' + controls.blue + ',' + controls.alpha + ')';
+            ctx.fillRect(0, 0, width, height);
+
+            var particuleslocales = particules;
+            var goutteslocales = gouttes;
+            var tau = Math.PI * 2;
+
+            for (var i = 0, particulesactives; particulesactives = particuleslocales[i]; i++) {
+                ctx.globalAlpha = particulesactives.alpha;
+                ctx.fillStyle = particulesactives.couleur;
+                ctx.fillRect(particulesactives.X, particulesactives.Y, particulesactives.vitesseY / 5, particulesactives.vitesseY); // تصغير عرض القطرات
+            }
+
+            for (var i = 0, gouttesactives; gouttesactives = goutteslocales[i]; i++) {
+                ctx.globalAlpha = gouttesactives.alpha;
+                ctx.fillStyle = gouttesactives.couleur;
+                ctx.beginPath();
+                ctx.arc(gouttesactives.X, gouttesactives.Y, gouttesactives.radius, 0, tau);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        function update() {
+            var particuleslocales = particules;
+            var goutteslocales = gouttes;
+
+            for (var i = 0, particulesactives; particulesactives = particuleslocales[i]; i++) {
+                particulesactives.X += particulesactives.vitesseX;
+                particulesactives.Y += particulesactives.vitesseY + 5; // زيادة السرعة العمودية
+                if (particulesactives.Y > height - 15) {
+                    particuleslocales.splice(i--, 1);
+                    explosion(particulesactives.X, particulesactives.Y, particulesactives.couleur);
+                }
+            }
+
+            for (var i = 0, gouttesactives; gouttesactives = goutteslocales[i]; i++) {
+                gouttesactives.X += gouttesactives.vitesseX;
+                gouttesactives.Y += gouttesactives.vitesseY;
+                gouttesactives.radius -= 0.075;
+                if (gouttesactives.alpha > 0) {
+                    gouttesactives.alpha -= 0.005;
+                } else {
+                    gouttesactives.alpha = 0;
+                }
+                if (gouttesactives.radius < 0) {
+                    goutteslocales.splice(i--, 1);
+                }
+            }
+
+            var i = controls.rain;
+            while (i--) {
+                Rain(Math.floor((Math.random() * width)), -15); // بدء القطرات من أعلى
+            }
+        }
+
+        (function boucle() {
+            requestAnimFrame(boucle);
+            update();
+            rendu(ctx);
+        })();
+    </script>
+</body>
+</html>
